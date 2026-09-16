@@ -1,0 +1,122 @@
+
+/* =========================================
+   FAST PREMIUM NAVBAR ENTRANCE
+   ========================================= */
+
+@keyframes navbarEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateY(2px) scale(1.005);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* =========================================
+   BLUE LIGHT SWEEP
+   ========================================= */
+
+@keyframes navbarLightSweep {
+  0% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.8;
+  }
+
+  70% {
+    opacity: 0.3;
+  }
+
+  100% {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+
+/* =========================================
+   NAVBAR
+   ========================================= */
+
+.navbar-entrance {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  animation: navbarEnter 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+
+/* Light sweep layer */
+
+.navbar-entrance::after {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 35%;
+  height: 100%;
+
+  pointer-events: none;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--primary-glow-strong),
+    transparent
+  );
+
+  filter: blur(8px);
+
+  animation: navbarLightSweep 0.7s ease-out 0.15s both;
+}
+
+
+/* =========================================
+   MOBILE MENU ITEM
+   ========================================= */
+
+@keyframes mobileItemEnter {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.mobile-nav-item {
+  animation:
+    mobileItemEnter 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+
+/* =========================================
+   ACCESSIBILITY
+   ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar-entrance,
+  .mobile-nav-item,
+  .navbar-entrance::after {
+    animation: none;
+  }
+}
+
