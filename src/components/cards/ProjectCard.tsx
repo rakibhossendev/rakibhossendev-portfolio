@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import Image from "next/image"
-import { ExternalLink, ImageOff } from "lucide-react"
+import Link from "next/link"
+import { ArrowRight, ExternalLink, ImageOff } from "lucide-react"
 import { GithubIcon } from "@/src/components/ui/SocialIcons"
 import { TechIcon } from "@/src/components/ui/TechIcon"
 import type { Project } from "@/src/types"
@@ -11,27 +12,52 @@ interface ProjectCardProps {
   project: Project
 }
 
+/** Tags beyond this count collapse into a "+N" chip so rows stay even. */
+const MAX_VISIBLE_TAGS = 4
+
 export function ProjectCard({ project }: ProjectCardProps) {
   const [imgError, setImgError] = useState(false)
+  const glowRef = useRef<HTMLDivElement>(null)
 
   const hasLive = !!project.liveUrl
   const hasGithub = !!project.githubUrl
+  const visibleTags = project.technologies.slice(0, MAX_VISIBLE_TAGS)
+  const extraTags = project.technologies.length - visibleTags.length
+
+  // Reference-style radial spotlight that tracks the pointer inside the card.
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    const glow = glowRef.current
+    if (!glow) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    glow.style.setProperty("--x", `${e.clientX - rect.left}px`)
+    glow.style.setProperty("--y", `${e.clientY - rect.top}px`)
+  }, [])
 
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)] transition-all duration-400 ease-out hover:-translate-y-2 hover:border-[var(--border-accent)] hover:shadow-[0_20px_60px_rgba(79,110,247,0.18)] hover:shadow-[var(--brand-accent)]/10">
-
-      {/* Glow overlay on hover */}
-      <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 ring-1 ring-inset ring-[var(--brand-accent)]/20 transition-opacity duration-300 group-hover:opacity-100" />
+    <article
+      onMouseMove={handleMouseMove}
+      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[var(--border-accent)] hover:shadow-[0_24px_60px_rgba(79,110,247,0.16)]"
+    >
+      {/* Pointer spotlight */}
+      <div
+        ref={glowRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          background:
+            "radial-gradient(320px circle at var(--x, 50%) var(--y, 50%), rgba(79, 110, 247, 0.14), transparent 65%)",
+        }}
+      />
 
       {/* Project image */}
-      <div className="relative h-48 w-full overflow-hidden bg-[var(--bg-secondary)]">
+      <div className="relative h-44 w-full shrink-0 overflow-hidden bg-[var(--bg-secondary)] sm:h-48">
         {!imgError ? (
           <Image
             src={project.image}
             alt={`${project.title} screenshot`}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
             onError={() => setImgError(true)}
           />
         ) : (
@@ -44,7 +70,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         )}
 
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] via-[var(--bg-card)]/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] via-[var(--bg-card)]/25 to-transparent" />
 
         {/* Featured badge */}
         {project.featured && (
@@ -55,50 +81,21 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
         {/* Primary tech badge */}
         {project.technologies[0] && (
-          <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full border border-[var(--border-accent)] bg-[var(--bg-card)]/80 px-2.5 py-1 text-xs font-medium text-[var(--brand-accent)] backdrop-blur-sm">
+          <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full border border-[var(--border-accent)] bg-[var(--bg-card)]/85 px-2.5 py-1 text-xs font-medium text-[var(--brand-accent)] backdrop-blur-sm">
             <TechIcon name={project.technologies[0]} className="h-3.5 w-3.5" />
             {project.technologies[0]}
           </div>
         )}
-
-        {/* Hover quick-action overlay */}
-        <div className="absolute inset-0 flex items-center justify-center gap-3 bg-[var(--bg-card)]/80 backdrop-blur-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          {hasLive && (
-            <a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1.5 rounded-lg bg-[var(--brand-accent)] px-4 py-2 text-xs font-bold text-white shadow-lg shadow-[var(--brand-accent)]/30 transition-all hover:brightness-110"
-              aria-label={`Live demo for ${project.title}`}
-            >
-              <ExternalLink className="h-3.5 w-3.5" />
-              Live Demo
-            </a>
-          )}
-          {hasGithub && (
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1.5 rounded-lg border border-[var(--border-accent)] bg-[var(--bg-card)] px-4 py-2 text-xs font-bold text-[var(--text-primary)] transition-all hover:bg-[var(--bg-card-hover)]"
-              aria-label={`GitHub for ${project.title}`}
-            >
-              <GithubIcon className="h-3.5 w-3.5" />
-              GitHub
-            </a>
-          )}
-        </div>
       </div>
 
       {/* Content */}
-      <div className="flex flex-1 flex-col gap-4 p-5">
+      <div className="relative z-20 flex flex-1 flex-col gap-4 p-5">
         <div>
-          <h3 className="text-base font-bold text-[var(--text-primary)] transition-colors duration-200 group-hover:text-[var(--brand-accent)]">
+          <h3 className="text-base font-bold leading-snug text-[var(--text-primary)] transition-colors duration-200 group-hover:text-[var(--brand-accent)]">
             {project.title}
           </h3>
-          <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
+          {/* Card copy stays at 2–3 lines — the README carries the full story. */}
+          <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-[var(--text-secondary)]">
             {project.shortDescription}
           </p>
         </div>
@@ -106,7 +103,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         {/* Technologies */}
         {project.technologies.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
-            {project.technologies.map((tech) => (
+            {visibleTags.map((tech) => (
               <span
                 key={tech}
                 className="flex items-center gap-1.5 rounded-md border border-[var(--border-subtle)] bg-[var(--bg-secondary)] px-2 py-0.5 text-xs font-medium text-[var(--text-secondary)] transition-colors group-hover:border-[var(--border-accent)]/50"
@@ -115,43 +112,51 @@ export function ProjectCard({ project }: ProjectCardProps) {
                 {tech}
               </span>
             ))}
+            {extraTags > 0 && (
+              <span className="flex items-center rounded-md border border-[var(--border-subtle)] bg-[var(--bg-secondary)] px-2 py-0.5 text-xs font-medium text-[var(--text-muted)]">
+                +{extraTags}
+              </span>
+            )}
           </div>
         )}
 
-        {/* Action links — visible at bottom */}
+        {/* Actions */}
         <div className="mt-auto flex items-center gap-2 border-t border-[var(--border-subtle)] pt-4">
-          {hasLive ? (
+          <Link
+            href={`/projects/${project.slug}`}
+            data-cursor-label="View"
+            className="group/more flex flex-1 items-center justify-center gap-1.5 rounded-full bg-[var(--brand-accent)] px-3 py-2 text-xs font-bold text-white transition-all hover:bg-[var(--brand-lighter)] hover:shadow-[0_0_16px_rgba(79,110,247,0.35)]"
+          >
+            View Details
+            <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover/more:translate-x-0.5" />
+          </Link>
+
+          {hasLive && (
             <a
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[var(--brand-accent)] px-3 py-2 text-xs font-semibold text-white transition-all hover:bg-[var(--brand-lighter)] hover:shadow-[0_0_16px_rgba(79,110,247,0.3)]"
+              title={`Live demo of ${project.title}`}
+              aria-label={`Live demo of ${project.title}`}
+              className="flex items-center gap-1.5 rounded-full border border-[var(--border-subtle)] px-3 py-2 text-xs font-semibold text-[var(--text-secondary)] transition-all hover:border-[var(--border-accent)] hover:text-[var(--text-primary)]"
             >
               <ExternalLink className="h-3.5 w-3.5" />
-              Live Demo
+              Demo
             </a>
-          ) : (
-            <span className="flex flex-1 cursor-not-allowed items-center justify-center gap-1.5 rounded-lg border border-[var(--border-subtle)] px-3 py-2 text-xs font-medium text-[var(--text-muted)]">
-              <ExternalLink className="h-3.5 w-3.5" />
-              No Demo
-            </span>
           )}
 
-          {hasGithub ? (
+          {hasGithub && (
             <a
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-[var(--border-subtle)] bg-white/5 px-3 py-2 text-xs font-semibold text-[var(--text-secondary)] transition-all hover:border-[var(--border-accent)] hover:text-[var(--text-primary)]"
+              title={`${project.title} source code`}
+              aria-label={`${project.title} source code on GitHub`}
+              className="flex items-center gap-1.5 rounded-full border border-[var(--border-subtle)] px-3 py-2 text-xs font-semibold text-[var(--text-secondary)] transition-all hover:border-[var(--border-accent)] hover:text-[var(--text-primary)]"
             >
               <GithubIcon className="h-3.5 w-3.5" />
-              GitHub
+              Code
             </a>
-          ) : (
-            <span className="flex flex-1 cursor-not-allowed items-center justify-center gap-1.5 rounded-lg border border-[var(--border-subtle)] px-3 py-2 text-xs font-medium text-[var(--text-muted)]">
-              <GithubIcon className="h-3.5 w-3.5" />
-              Private
-            </span>
           )}
         </div>
       </div>

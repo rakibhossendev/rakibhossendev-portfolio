@@ -1,12 +1,21 @@
 import type { Metadata } from "next"
-import { Plus_Jakarta_Sans } from "next/font/google"
+import { Inter, Montserrat } from "next/font/google"
 import "./globals.css"
 import { personal } from "@/src/data/personal"
+import { CustomCursor } from "@/src/components/animations/CustomCursor"
 
-const plusJakarta = Plus_Jakarta_Sans({
+// Self-hosted at build time by next/font — no runtime requests to Google.
+// Inter for body copy, Montserrat for headings (matches the reference site's
+// pairing). Both expose CSS variables consumed in src/app/globals.css.
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-plus-jakarta",
-  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-inter",
+  display: "swap",
+})
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
   display: "swap",
 })
 
@@ -64,8 +73,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={plusJakarta.variable}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${inter.variable} ${montserrat.variable}`}
+    >
       <body className="bg-[var(--bg)] text-[var(--text-primary)] antialiased">
+        <CustomCursor />
         {children}
       </body>
     </html>

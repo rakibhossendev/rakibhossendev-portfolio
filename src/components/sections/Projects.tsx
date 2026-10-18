@@ -26,7 +26,7 @@ export function Projects() {
           <SectionHeader
             eyebrow="My Work"
             title="Featured Projects"
-            description="A selection of projects I've built. Each project links to a live demo and GitHub repository when available."
+            description="A selection of projects I've built. Each one opens a details page with documentation generated from its GitHub README."
             icon={<FolderOpen className="h-5 w-5" />}
           />
         </Reveal>
@@ -45,7 +45,11 @@ export function Projects() {
           <>
             <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {displayedProjects.map((project, i) => (
-                <Reveal key={project.id} delay={Math.min(i * 60, 400)}>
+                <Reveal
+                  key={project.id}
+                  delay={Math.min(i * 60, 400)}
+                  className="h-full"
+                >
                   <ProjectCard project={project} />
                 </Reveal>
               ))}
@@ -56,7 +60,7 @@ export function Projects() {
                 <button
                   id="projects-show-more"
                   onClick={() => setShowAll(!showAll)}
-                  className="group relative flex items-center gap-2.5 overflow-hidden rounded-xl border border-[var(--border-accent)] bg-[var(--brand-accent)]/5 px-7 py-3.5 text-sm font-bold text-[var(--brand-accent)] transition-all duration-300 hover:bg-[var(--brand-accent)]/12 hover:shadow-[0_0_20px_rgba(79,110,247,0.2)]"
+                  className="group relative flex items-center gap-2.5 overflow-hidden rounded-full border border-[var(--border-accent)] bg-[var(--brand-accent)]/5 px-7 py-3.5 text-sm font-bold text-[var(--brand-accent)] transition-all duration-300 hover:bg-[var(--brand-accent)]/12 hover:shadow-[0_0_20px_rgba(79,110,247,0.2)]"
                 >
                   {/* Shine effect */}
                   <span className="absolute left-0 top-0 h-full w-0 bg-gradient-to-r from-transparent via-[var(--brand-accent)]/10 to-transparent transition-all duration-500 group-hover:w-full" />

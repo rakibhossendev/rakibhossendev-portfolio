@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Menu, X, Download, ExternalLink } from "lucide-react"
 import { GithubIcon } from "@/src/components/ui/SocialIcons"
 import { personal } from "@/src/data/personal"
@@ -18,6 +20,9 @@ export function Navbar() {
   const [activeSection, setActiveSection] = useState("home")
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const pathname = usePathname()
+  // Sections live on the homepage only; detail routes link back via /#hash.
+  const isHome = pathname === "/"
 
   useEffect(() => {
     const handleScroll = () => {
@@ -80,6 +85,22 @@ export function Navbar() {
     .map((w) => w[0])
     .join("")
 
+  const logoContent = (
+    <>
+      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--brand-accent)] to-purple-600 shadow-lg shadow-[var(--brand-glow)] transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(79,110,247,0.4)]">
+        <span className="text-sm font-black tracking-tighter text-white">
+          {initials}
+        </span>
+      </div>
+      <span className="hidden text-sm font-bold tracking-wide text-[var(--text-primary)] sm:block">
+        {personal.name.split(" ")[0]}{" "}
+        <span className="text-[var(--brand-accent)]">
+          {personal.name.split(" ")[1]}
+        </span>
+      </span>
+    </>
+  )
+
   return (
     <>
       <header
@@ -96,49 +117,56 @@ export function Navbar() {
           aria-label="Main navigation"
         >
           {/* Logo */}
-          <a
-            href="#home"
-            onClick={(e) => handleNavClick(e, "#home")}
-            className="flex items-center gap-2.5 group"
-            aria-label="Rakib Hossen - Home"
-          >
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--brand-accent)] to-purple-600 shadow-lg shadow-[var(--brand-glow)] transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(79,110,247,0.4)]">
-              <span className="text-sm font-black text-white tracking-tighter">
-                {initials}
-              </span>
-            </div>
-            <span className="hidden font-bold text-[var(--text-primary)] sm:block text-sm tracking-wide">
-              {personal.name.split(" ")[0]}{" "}
-              <span className="text-[var(--brand-accent)]">
-                {personal.name.split(" ")[1]}
-              </span>
-            </span>
-          </a>
+          {isHome ? (
+            <a
+              href="#home"
+              onClick={(e) => handleNavClick(e, "#home")}
+              className="group flex items-center gap-2.5"
+              aria-label="Rakib Hossen - Home"
+            >
+              {logoContent}
+            </a>
+          ) : (
+            <Link
+              href="/"
+              className="group flex items-center gap-2.5"
+              aria-label="Rakib Hossen - Home"
+            >
+              {logoContent}
+            </Link>
+          )}
 
           {/* Desktop nav links */}
-          <ul className="hidden items-center gap-1 md:flex" role="list">
+          <ul className="hidden items-center gap-1 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)]/50 p-1 backdrop-blur-md md:flex" role="list">
             {navLinks.map((link) => {
               const id = link.href.slice(1)
-              const isActive = activeSection === id
-              return (
+              const isActive = isHome && activeSection === id
+              const classes = cn(
+                "block rounded-full px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider transition-all duration-200",
+                isActive
+                  ? "bg-[var(--brand-accent)]/10 text-[var(--brand-accent)]"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+              )
+              return isHome ? (
                 <li key={link.href}>
                   <a
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className={cn(
-                      "relative px-3.5 py-1.5 text-sm font-medium rounded-lg transition-all duration-200",
-                      "hover:text-[var(--text-primary)] hover:bg-white/5",
-                      isActive
-                        ? "text-[var(--brand-accent)]"
-                        : "text-[var(--text-secondary)]"
-                    )}
+                    className={classes}
                     aria-current={isActive ? "page" : undefined}
                   >
                     {link.label}
-                    {isActive && (
-                      <span className="absolute bottom-0 left-1/2 h-0.5 w-4 -translate-x-1/2 rounded-full bg-[var(--brand-accent)]" />
-                    )}
                   </a>
+                </li>
+              ) : (
+                <li key={link.href}>
+                  <Link
+                    href={`/${link.href}`}
+                    className={classes}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
                 </li>
               )
             })}
@@ -158,7 +186,7 @@ export function Navbar() {
             <a
               href={personal.resumePath}
               download="Rakib-Hossen-Resume.pdf"
-              className="flex items-center gap-2 rounded-lg border border-[var(--brand-accent)] bg-[var(--brand-accent)]/10 px-4 py-1.5 text-sm font-semibold text-[var(--brand-accent)] transition-all duration-200 hover:bg-[var(--brand-accent)] hover:text-white hover:shadow-[0_0_20px_rgba(79,110,247,0.3)]"
+              className="flex items-center gap-2 rounded-full border border-[var(--brand-accent)] bg-[var(--brand-accent)]/10 px-4 py-1.5 text-sm font-semibold text-[var(--brand-accent)] transition-all duration-200 hover:bg-[var(--brand-accent)] hover:text-white hover:shadow-[0_0_20px_rgba(79,110,247,0.3)]"
             >
               <Download className="h-3.5 w-3.5" />
               Resume
@@ -192,21 +220,36 @@ export function Navbar() {
               <ul className="flex flex-col gap-1" role="list">
                 {navLinks.map((link, i) => {
                   const id = link.href.slice(1)
-                  const isActive = activeSection === id
+                  const isActive = isHome && activeSection === id
+                  const classes = cn(
+                    "flex items-center gap-3 rounded-xl px-4 py-3.5 text-base font-medium transition-all duration-200",
+                    isActive
+                      ? "border border-[var(--border-accent)] bg-[var(--brand-accent)]/10 text-[var(--brand-accent)]"
+                      : "text-[var(--text-secondary)] hover:bg-white/5 hover:text-[var(--text-primary)]"
+                  )
                   return (
-                    <li key={link.href} className="animate-fade-in-up opacity-0" style={{ animationDelay: `${i * 60}ms`, animationFillMode: "forwards" }}>
-                      <a
-                        href={link.href}
-                        onClick={(e) => handleNavClick(e, link.href)}
-                        className={cn(
-                          "flex items-center gap-3 rounded-xl px-4 py-3.5 text-base font-medium transition-all duration-200",
-                          isActive
-                            ? "bg-[var(--brand-accent)]/10 text-[var(--brand-accent)] border border-[var(--border-accent)]"
-                            : "text-[var(--text-secondary)] hover:bg-white/5 hover:text-[var(--text-primary)]"
-                        )}
-                      >
-                        {link.label}
-                      </a>
+                    <li
+                      key={link.href}
+                      className="animate-fade-in-up opacity-0"
+                      style={{ animationDelay: `${i * 60}ms`, animationFillMode: "forwards" }}
+                    >
+                      {isHome ? (
+                        <a
+                          href={link.href}
+                          onClick={(e) => handleNavClick(e, link.href)}
+                          className={classes}
+                        >
+                          {link.label}
+                        </a>
+                      ) : (
+                        <Link
+                          href={`/${link.href}`}
+                          className={classes}
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {link.label}
+                        </Link>
+                      )}
                     </li>
                   )
                 })}
@@ -219,7 +262,7 @@ export function Navbar() {
                 href={personal.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-xl border border-[var(--border-subtle)] px-4 py-3 text-sm font-medium text-[var(--text-secondary)] transition-all hover:bg-white/5 hover:text-[var(--text-primary)]"
+                className="flex items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] px-4 py-3 text-sm font-medium text-[var(--text-secondary)] transition-all hover:bg-white/5 hover:text-[var(--text-primary)]"
               >
                 <GithubIcon className="h-4 w-4" />
                 GitHub Profile
@@ -228,7 +271,7 @@ export function Navbar() {
               <a
                 href={personal.resumePath}
                 download="Rakib-Hossen-Resume.pdf"
-                className="flex items-center justify-center gap-2 rounded-xl bg-[var(--brand-accent)] px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-[var(--brand-lighter)] hover:shadow-[0_0_20px_rgba(79,110,247,0.3)]"
+                className="flex items-center justify-center gap-2 rounded-full bg-[var(--brand-accent)] px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-[var(--brand-lighter)] hover:shadow-[0_0_20px_rgba(79,110,247,0.3)]"
               >
                 <Download className="h-4 w-4" />
                 Download Resume

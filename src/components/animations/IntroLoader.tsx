@@ -8,6 +8,23 @@ export function IntroLoader({ onComplete }: { onComplete: () => void }) {
   const [phase, setPhase] = useState<"loading" | "reveal" | "done">("loading")
 
   useEffect(() => {
+    // Play the intro once per session — returning from a project detail page
+    // should not replay the ~2s loader on every navigation. Deferred one frame
+    // because setState must not run synchronously inside an effect.
+    let seen = false
+    try {
+      seen = window.sessionStorage.getItem("portfolio-intro-seen") === "1"
+    } catch {
+      // Storage can be blocked in private modes; fall through and play it.
+    }
+    if (seen) {
+      requestAnimationFrame(() => {
+        setPhase("done")
+        onComplete()
+      })
+      return
+    }
+
     // Animate progress bar
     const startTime = Date.now()
     const duration = 1600
@@ -24,6 +41,11 @@ export function IntroLoader({ onComplete }: { onComplete: () => void }) {
           setPhase("reveal")
           setTimeout(() => {
             setPhase("done")
+            try {
+              window.sessionStorage.setItem("portfolio-intro-seen", "1")
+            } catch {
+              // Ignore storage failures — the intro simply plays again.
+            }
             onComplete()
           }, 600)
         }, 200)
