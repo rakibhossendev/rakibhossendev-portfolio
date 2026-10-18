@@ -8,7 +8,7 @@ import { personal } from "@/src/data/personal"
 
 const roles = [
   "Full Stack Developer",
-  "React.js Developer",
+  "React Developer",
   "Next.js Developer",
   "Problem Solver",
 ]

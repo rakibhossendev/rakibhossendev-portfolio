@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Mail, Send, ArrowUpRight, Shield, User, AtSign, MessageSquare } from "lucide-react"
-import { GithubIcon, LinkedinIcon, FacebookIcon } from "@/src/components/ui/SocialIcons"
+import { GithubIcon, LinkedinIcon} from "@/src/components/ui/SocialIcons"
 import { personal } from "@/src/data/personal"
 import { SectionHeader } from "@/src/components/ui/SectionHeader"
 
@@ -19,7 +19,7 @@ const contactLinks = [
   {
     icon: LinkedinIcon,
     label: "LinkedIn Professional",
-    value: "linkedin.com/in/rakibhossen",
+    value: "linkedin.com/in/rakib-hossendev",
     href: personal.linkedin,
     color: "text-[#0A66C2]",
     bg: "bg-[#0A66C2]/10",
@@ -28,7 +28,7 @@ const contactLinks = [
   {
     icon: GithubIcon,
     label: "GitHub Repositories",
-    value: "github.com/rakibhossen",
+    value: "github.com/rakibhossendev",
     href: personal.github,
     color: "text-[var(--text-primary)]",
     bg: "bg-white/5",
