@@ -24,7 +24,8 @@ npm run build       # next build
 
 ## Content & routing
 
-- All site copy/data is hardcoded TypeScript in `src/data/` (`personal.ts`, `projects.ts`, `skills.ts`), typed by `src/types/index.ts`. To change site content, edit these files.
+- All site copy/data is hardcoded TypeScript in `src/data/` (`personal.ts`, `projects.ts`, `skills.ts`, `blogs.ts`), typed by `src/types/index.ts`. To change site content, edit these files.
+- `src/lib/projects.ts` exports selectors (`getFeaturedProjects`, `getAllProjects`, `getProjectById`) that nothing imports yet — sections read `src/data/projects` directly.
 - `content/projects/*.md` is dead weight — no code reads it; there is no markdown/MDX pipeline.
 - Routing is hash-based on one page: `/` renders `src/components/PortfolioClient.tsx`, which composes all sections. `/about`, `/blogs`, `/projects` just `redirect("/#...")`.
 - `PortfolioClient.tsx` is a client component gated on the intro loader's `loaded` state; the root layout itself is a server component.
