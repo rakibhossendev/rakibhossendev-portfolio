@@ -122,14 +122,14 @@ export function Hero() {
             >
               <button
                 onClick={() => handleScroll("projects")}
-                className="group flex items-center gap-2 rounded-xl bg-[var(--brand-accent)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[var(--brand-accent)]/20 transition-all duration-300 hover:bg-[var(--brand-lighter)] hover:shadow-[0_0_30px_rgba(79,110,247,0.4)] hover:translate-y-[-2px]"
+                className="group flex items-center gap-2 rounded-full bg-[var(--brand-accent)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[var(--brand-accent)]/20 transition-all duration-300 hover:bg-[var(--brand-lighter)] hover:shadow-[0_0_30px_rgba(79,110,247,0.4)] hover:translate-y-[-2px]"
               >
                 View Projects
                 <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
               </button>
               <button
                 onClick={() => handleScroll("contact")}
-                className="flex items-center gap-2 rounded-xl border border-[var(--border-subtle)] bg-white/5 px-6 py-3 text-sm font-semibold text-[var(--text-primary)] transition-all duration-300 hover:border-[var(--border-accent)] hover:bg-[var(--brand-accent)]/5 hover:translate-y-[-2px]"
+                className="flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-white/5 px-6 py-3 text-sm font-semibold text-[var(--text-primary)] transition-all duration-300 hover:border-[var(--border-accent)] hover:bg-[var(--brand-accent)]/5 hover:translate-y-[-2px]"
               >
                 <Mail className="h-4 w-4" />
                 Contact Me

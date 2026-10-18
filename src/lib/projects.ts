@@ -16,3 +16,21 @@ export function getAllProjects(): Project[] {
 export function getProjectById(id: string): Project | undefined {
   return projects.find((p) => p.id === id)
 }
+
+/** Returns a project by its URL slug, or undefined if not found. */
+export function getProjectBySlug(slug: string): Project | undefined {
+  return projects.find((p) => p.slug === slug)
+}
+
+/** Previous / next project relative to `slug`, in data order (no wrap-around). */
+export function getAdjacentProjects(slug: string): {
+  prev?: Project
+  next?: Project
+} {
+  const index = projects.findIndex((p) => p.slug === slug)
+  if (index === -1) return {}
+  return {
+    prev: index > 0 ? projects[index - 1] : undefined,
+    next: index < projects.length - 1 ? projects[index + 1] : undefined,
+  }
+}

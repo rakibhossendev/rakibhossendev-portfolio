@@ -205,7 +205,7 @@ export function Contact() {
               {/* Submit */}
               <button
                 type="submit"
-                className="group mt-1 flex w-full items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-[var(--brand-accent)] to-purple-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-[var(--brand-accent)]/20 transition-all duration-300 hover:shadow-[0_0_30px_rgba(79,110,247,0.4)] hover:brightness-110"
+                className="group mt-1 flex w-full items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-[var(--brand-accent)] to-purple-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-[var(--brand-accent)]/20 transition-all duration-300 hover:shadow-[0_0_30px_rgba(79,110,247,0.4)] hover:brightness-110"
               >
                 <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 Transmit Message

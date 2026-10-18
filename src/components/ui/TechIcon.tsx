@@ -11,6 +11,7 @@ import {
   siPython,
   siReact,
   siSqlalchemy,
+  siSqlite,
   siTailwindcss,
   siTypescript,
 } from "simple-icons"
@@ -36,6 +37,7 @@ const icons: Record<string, SimpleIcon> = {
   tailwindcss: siTailwindcss,
   betterauth: siBetterauth,
   sqlalchemy: siSqlalchemy,
+  sqlite: siSqlite,
   mysql: siMysql,
   mongodb: siMongodb,
   bootstrap: siBootstrap,
@@ -56,6 +58,8 @@ const colorOverrides: Record<string, string> = {
   sqlalchemy: "#F4674A",
   // Official #3776AB is dim on navy.
   python: "#5A9BD5",
+  // Official #003B57 is invisible on navy.
+  sqlite: "#7BAEDB",
 }
 
 /** Normalize a display name ("Node.js", "Tailwind Css", "better-auth") to a slug key. */

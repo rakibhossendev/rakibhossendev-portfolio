@@ -24,16 +24,16 @@ export function SectionHeader({
               {icon}
             </span>
           )}
-          <span className="text-sm font-semibold uppercase tracking-widest text-[var(--brand-accent)]">
+          <span className="text-xs font-semibold uppercase tracking-widest text-[var(--brand-accent)] md:text-sm">
             {eyebrow}
           </span>
         </div>
       )}
-      <h2 className="text-3xl font-black tracking-tight text-[var(--text-primary)] sm:text-4xl">
+      <h2 className="text-3xl font-extrabold tracking-tight text-[var(--text-primary)] sm:text-4xl md:text-5xl">
         {title}
       </h2>
       {description && (
-        <p className="max-w-2xl text-base text-[var(--text-secondary)] leading-relaxed">
+        <p className="max-w-2xl text-base leading-relaxed text-[var(--text-secondary)] sm:text-lg">
           {description}
         </p>
       )}

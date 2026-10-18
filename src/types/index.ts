@@ -1,12 +1,22 @@
 export interface Project {
   id: string
+  /** URL segment for the detail route: /projects/[slug] */
+  slug: string
   title: string
+  /** Card copy. Keep to ~2–3 lines; the README carries the full documentation. */
   shortDescription: string
+  /** Longer intro used on the detail page when the GitHub README is unavailable. */
   fullDescription: string
   image: string
+  gallery?: string[]
   technologies: string[]
   liveUrl?: string
   githubUrl?: string
+  /**
+   * Optional explicit README link (GitHub blob or raw URL). When omitted the
+   * README is resolved automatically from `githubUrl`.
+   */
+  readmeUrl?: string
   featured: boolean
 }
 
