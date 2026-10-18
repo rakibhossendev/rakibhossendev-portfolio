@@ -3,19 +3,26 @@ import type { PersonalInfo } from "@/src/types"
 export const personal: PersonalInfo = {
   name: "RAKIB HOSSEN",
   role: "Full Stack Developer",
+
   shortBio:
-    "I'm a passionate Full Stack Developer who loves building elegant, high-performance web applications. I bridge the gap between beautiful UI and robust backend systems.",
+    "Full Stack Developer | TypeScript • JavaScript • Python • Next.js • Node.js • Express.js • Flask • MySQL • MongoDB • React • Tailwind CSS | Learning by Building Real-World Projects",
+
   fullBio: [
-    "I'm Rakib Hossen, a Full Stack Developer with a deep passion for crafting digital experiences that are both functional and visually compelling. My journey in software development began with a curiosity for how things work on the web, which quickly evolved into a career building production-ready applications.",
-    "I specialize in building full-stack web applications using modern technologies like React.js, Next.js, Node.js, and Python/Flask on the backend. I'm particularly drawn to the intersection of great user experience and clean, maintainable code.",
-    "When I'm not coding, I enjoy exploring new technologies, contributing to open-source projects, and continuously sharpening my skills. I believe in writing code that not only works today but is scalable and maintainable for the future.",
-    "I'm always open to exciting new opportunities and collaborations. If you have an interesting project or just want to connect, feel free to reach out!",
-  ],
-  email: "rakibhossen@example.com",
-  github: "https://github.com/rakibhossen",
-  linkedin: "https://linkedin.com/in/rakibhossen",
-  facebook: "https://facebook.com/rakibhossen",
+  `I’m Rakib Hossen, a Full Stack Developer passionate about building practical digital solutions and solving real-world problems through code. I enjoy developing user-friendly web applications, designing reliable backend systems, and connecting different parts of an application to create complete and functional products. I focus on writing clean, maintainable code and continuously improving my development skills through hands-on projects.`,
+
+  `One of my key achievements is contributing to a Result Management System designed for Diploma Engineering students in Bangladesh. The project aims to simplify academic result management by organizing student information, marks, CGPA, attendance, and related academic records in one platform. I have worked on the backend architecture and application logic, focusing on data management, role-based access control, and reliable communication between different parts of the system.`,
+
+  `I actively build and improve real-world web development projects to strengthen my problem-solving abilities and gain practical experience. I enjoy exploring new ideas, learning from the developer community, and turning concepts into useful applications. Through consistent practice and project development, I aim to improve both my technical understanding and my ability to build software that addresses practical needs.`,
+
+  `My long-term goal is to grow as a professional Full Stack Developer and contribute to meaningful software projects. I am particularly interested in developing scalable web applications, building reliable backend functionality, improving application performance, and creating smooth user experiences. I welcome opportunities to collaborate with other developers, contribute to real-world products, and continue growing through challenging development work.`
+],
+
+  email: "dev.rakibhossen.web@gmail.com",
+  github: "https://github.com/rakibhossendev",
+  linkedin: "https://linkedin.com/in/rakib-hossendev",
+  facebook: "https://facebook.com/rakibhossendev",
+
   resumePath: "/resume.pdf",
-  profileImage: "/images/profile.webp",
+  profileImage: "/images/rakibhossendev-image.jpg",
   location: "Bangladesh",
-}
+};

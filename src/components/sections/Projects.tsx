@@ -6,15 +6,15 @@ import { projects } from "@/src/data/projects"
 import { ProjectCard } from "@/src/components/cards/ProjectCard"
 import { SectionHeader } from "@/src/components/ui/SectionHeader"
 
-const FEATURED_COUNT = 3
+const INITIAL_COUNT = 3
 
 export function Projects() {
   const [showAll, setShowAll] = useState(false)
 
-  const featuredProjects = projects.filter((p) => p.featured).slice(0, FEATURED_COUNT)
-  const allProjects = projects
-  const hasMore = allProjects.length > FEATURED_COUNT
-  const displayedProjects = showAll ? allProjects : featuredProjects
+  const featuredProjects = projects.filter((p) => p.featured).slice(0, INITIAL_COUNT)
+  const hasMore = projects.length > INITIAL_COUNT
+  const displayedProjects = showAll ? projects : featuredProjects
+  const hiddenCount = projects.length - INITIAL_COUNT
 
   return (
     <section id="projects" className="section-padding relative bg-[var(--bg-secondary)]">
@@ -47,11 +47,15 @@ export function Projects() {
             </div>
 
             {hasMore && (
-              <div className="mt-10 flex justify-center">
+              <div className="mt-10 flex flex-col items-center gap-3">
                 <button
+                  id="projects-show-more"
                   onClick={() => setShowAll(!showAll)}
-                  className="group flex items-center gap-2 rounded-xl border border-[var(--border-accent)] bg-[var(--brand-accent)]/5 px-6 py-3 text-sm font-semibold text-[var(--brand-accent)] transition-all duration-200 hover:bg-[var(--brand-accent)]/10"
+                  className="group relative flex items-center gap-2.5 overflow-hidden rounded-xl border border-[var(--border-accent)] bg-[var(--brand-accent)]/5 px-7 py-3.5 text-sm font-bold text-[var(--brand-accent)] transition-all duration-300 hover:bg-[var(--brand-accent)]/12 hover:shadow-[0_0_20px_rgba(79,110,247,0.2)]"
                 >
+                  {/* Shine effect */}
+                  <span className="absolute left-0 top-0 h-full w-0 bg-gradient-to-r from-transparent via-[var(--brand-accent)]/10 to-transparent transition-all duration-500 group-hover:w-full" />
+
                   {showAll ? (
                     <>
                       Show Less
@@ -59,11 +63,19 @@ export function Projects() {
                     </>
                   ) : (
                     <>
-                      View All Projects ({allProjects.length})
+                      Show More Projects
+                      <span className="rounded-full bg-[var(--brand-accent)]/20 px-2 py-0.5 text-xs font-semibold">
+                        +{hiddenCount}
+                      </span>
                       <ChevronDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
                     </>
                   )}
                 </button>
+                {!showAll && (
+                  <p className="text-xs text-[var(--text-muted)]">
+                    {hiddenCount} more project{hiddenCount !== 1 ? "s" : ""} hidden
+                  </p>
+                )}
               </div>
             )}
           </>
