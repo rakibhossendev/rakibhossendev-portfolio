@@ -4,6 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import { ExternalLink, ImageOff } from "lucide-react"
 import { GithubIcon } from "@/src/components/ui/SocialIcons"
+import { TechIcon } from "@/src/components/ui/TechIcon"
 import type { Project } from "@/src/types"
 
 interface ProjectCardProps {
@@ -54,7 +55,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
         {/* Primary tech badge */}
         {project.technologies[0] && (
-          <div className="absolute left-3 top-3 rounded-full border border-[var(--border-accent)] bg-[var(--bg-card)]/80 px-2.5 py-1 text-xs font-medium text-[var(--brand-accent)] backdrop-blur-sm">
+          <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full border border-[var(--border-accent)] bg-[var(--bg-card)]/80 px-2.5 py-1 text-xs font-medium text-[var(--brand-accent)] backdrop-blur-sm">
+            <TechIcon name={project.technologies[0]} className="h-3.5 w-3.5" />
             {project.technologies[0]}
           </div>
         )}
@@ -107,8 +109,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
             {project.technologies.map((tech) => (
               <span
                 key={tech}
-                className="rounded-md border border-[var(--border-subtle)] bg-[var(--bg-secondary)] px-2 py-0.5 text-xs font-medium text-[var(--text-secondary)] transition-colors group-hover:border-[var(--border-accent)]/50"
+                className="flex items-center gap-1.5 rounded-md border border-[var(--border-subtle)] bg-[var(--bg-secondary)] px-2 py-0.5 text-xs font-medium text-[var(--text-secondary)] transition-colors group-hover:border-[var(--border-accent)]/50"
               >
+                <TechIcon name={tech} className="h-3 w-3" />
                 {tech}
               </span>
             ))}
