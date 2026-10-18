@@ -126,6 +126,28 @@
   }
 }
 
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -181,6 +203,23 @@
   }
   .animate-fade-in {
     animation: fadeIn 0.5s ease forwards;
+  }
+
+  /* Scroll reveal (see src/components/animations/Reveal.tsx) */
+  .reveal {
+    opacity: 0;
+  }
+  .reveal-visible {
+    animation-name: fadeInUp;
+    animation-duration: 0.6s;
+    animation-timing-function: ease;
+    animation-fill-mode: both;
+  }
+  .reveal-visible[data-reveal="left"] {
+    animation-name: fadeInLeft;
+  }
+  .reveal-visible[data-reveal="right"] {
+    animation-name: fadeInRight;
   }
   .animate-float {
     animation: float 4s ease-in-out infinite;

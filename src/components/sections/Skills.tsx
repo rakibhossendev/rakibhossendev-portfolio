@@ -5,6 +5,7 @@ import { Code2 } from "lucide-react"
 import { skills } from "@/src/data/skills"
 import { SkillCard } from "@/src/components/cards/SkillCard"
 import { SectionHeader } from "@/src/components/ui/SectionHeader"
+import { Reveal } from "@/src/components/animations/Reveal"
 import type { SkillCategory } from "@/src/types"
 import { cn } from "@/src/lib/utils"
 
@@ -37,15 +38,17 @@ export function Skills() {
       <div className="absolute right-0 top-1/2 h-64 w-64 -translate-y-1/2 rounded-full bg-[var(--brand-accent)] opacity-[0.03] blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeader
-          eyebrow="Technical Skills"
-          title="My Tech Stack"
-          description="Technologies I work with to build full-stack applications"
-          icon={<Code2 className="h-5 w-5" />}
-        />
+        <Reveal>
+          <SectionHeader
+            eyebrow="Technical Skills"
+            title="My Tech Stack"
+            description="Technologies I work with to build full-stack applications"
+            icon={<Code2 className="h-5 w-5" />}
+          />
+        </Reveal>
 
         {/* Category Tabs Toggle */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+        <Reveal className="mt-10 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
           {tabs.map((tab) => {
             const isActive = activeCategory === tab
             return (
@@ -82,12 +85,14 @@ export function Skills() {
               </button>
             )
           })}
-        </div>
+        </Reveal>
 
         {/* Skills Grid */}
         <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-          {displayedSkills.map((skill) => (
-            <SkillCard key={skill.name} skill={skill} />
+          {displayedSkills.map((skill, i) => (
+            <Reveal key={skill.name} delay={Math.min(i * 60, 400)}>
+              <SkillCard skill={skill} />
+            </Reveal>
           ))}
         </div>
 

@@ -5,6 +5,7 @@ import { FolderOpen, ChevronDown, ChevronUp } from "lucide-react"
 import { projects } from "@/src/data/projects"
 import { ProjectCard } from "@/src/components/cards/ProjectCard"
 import { SectionHeader } from "@/src/components/ui/SectionHeader"
+import { Reveal } from "@/src/components/animations/Reveal"
 
 const INITIAL_COUNT = 3
 
@@ -21,12 +22,14 @@ export function Projects() {
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--border-accent)] to-transparent" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeader
-          eyebrow="My Work"
-          title="Featured Projects"
-          description="A selection of projects I've built. Each project links to a live demo and GitHub repository when available."
-          icon={<FolderOpen className="h-5 w-5" />}
-        />
+        <Reveal>
+          <SectionHeader
+            eyebrow="My Work"
+            title="Featured Projects"
+            description="A selection of projects I've built. Each project links to a live demo and GitHub repository when available."
+            icon={<FolderOpen className="h-5 w-5" />}
+          />
+        </Reveal>
 
         {displayedProjects.length === 0 ? (
           <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-[var(--border-subtle)] py-20 text-center">
@@ -41,13 +44,15 @@ export function Projects() {
         ) : (
           <>
             <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {displayedProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
+              {displayedProjects.map((project, i) => (
+                <Reveal key={project.id} delay={Math.min(i * 60, 400)}>
+                  <ProjectCard project={project} />
+                </Reveal>
               ))}
             </div>
 
             {hasMore && (
-              <div className="mt-10 flex flex-col items-center gap-3">
+              <Reveal className="mt-10 flex flex-col items-center gap-3">
                 <button
                   id="projects-show-more"
                   onClick={() => setShowAll(!showAll)}
@@ -76,7 +81,7 @@ export function Projects() {
                     {hiddenCount} more project{hiddenCount !== 1 ? "s" : ""} hidden
                   </p>
                 )}
-              </div>
+              </Reveal>
             )}
           </>
         )}
