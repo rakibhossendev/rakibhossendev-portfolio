@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Mail, Send, ArrowUpRight, Shield, User, AtSign, MessageSquare } from "lucide-react"
+import { Mail, Send, ArrowUpRight, Shield, User, AtSign, MessageSquare, PenLine } from "lucide-react"
 import { GithubIcon, LinkedinIcon} from "@/src/components/ui/SocialIcons"
 import { personal } from "@/src/data/personal"
 import { SectionHeader } from "@/src/components/ui/SectionHeader"
@@ -37,19 +37,27 @@ const contactLinks = [
 ]
 
 export function Contact() {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" })
-  const [sending, setSending] = useState(false)
+  const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" })
   const [sent, setSent] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Builds a mailto link prefilled with the form, addressed to personal.email
+  const buildMailtoUrl = () => {
+    const subject = formData.subject.trim() || "Portfolio Contact"
+    const body = [
+      `Name: ${formData.name.trim()}`,
+      `Email: ${formData.email.trim()}`,
+      "",
+      formData.message.trim(),
+    ].join("\r\n")
+    return `mailto:${personal.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    setSending(true)
-    // Simulate send
-    await new Promise((r) => setTimeout(r, 1200))
-    setSending(false)
+    // Hand the prefilled draft to the visitor's mail app — they press Send there
+    window.location.href = buildMailtoUrl()
     setSent(true)
-    setFormData({ name: "", email: "", message: "" })
-    setTimeout(() => setSent(false), 4000)
+    setTimeout(() => setSent(false), 8000)
   }
 
   return (
@@ -156,6 +164,25 @@ export function Contact() {
                 </div>
               </div>
 
+              {/* Subject */}
+              <div>
+                <label htmlFor="contact-subject" className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">
+                  Subject
+                </label>
+                <div className="relative">
+                  <PenLine className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-muted)]" />
+                  <input
+                    id="contact-subject"
+                    type="text"
+                    required
+                    placeholder="Project inquiry"
+                    value={formData.subject}
+                    onChange={(e) => setFormData((p) => ({ ...p, subject: e.target.value }))}
+                    className="w-full rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-secondary)] py-3 pl-10 pr-4 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--border-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--brand-accent)]/30 transition-colors"
+                  />
+                </div>
+              </div>
+
               {/* Message */}
               <div>
                 <label htmlFor="contact-message" className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">
@@ -175,23 +202,43 @@ export function Contact() {
               {/* Submit */}
               <button
                 type="submit"
-                disabled={sending || sent}
-                className="group mt-1 flex w-full items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-[var(--brand-accent)] to-purple-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-[var(--brand-accent)]/20 transition-all duration-300 hover:shadow-[0_0_30px_rgba(79,110,247,0.4)] hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="group mt-1 flex w-full items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-[var(--brand-accent)] to-purple-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-[var(--brand-accent)]/20 transition-all duration-300 hover:shadow-[0_0_30px_rgba(79,110,247,0.4)] hover:brightness-110"
               >
-                {sent ? (
-                  <>✓ Message Sent!</>
-                ) : sending ? (
-                  <>
-                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                    Transmit Message
-                  </>
-                )}
+                <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                Transmit Message
               </button>
+
+              {/* Success notice — mail app handed the prefilled draft */}
+              {sent && (
+                <div className="rounded-xl border border-emerald-400/25 bg-emerald-500/10 p-4">
+                  <p className="text-sm font-semibold text-emerald-400">
+                    ✓ Mail app opened
+                  </p>
+                  <p className="mt-1.5 text-sm leading-relaxed text-[var(--text-secondary)]">
+                    Your email is drafted and addressed to{" "}
+                    <span className="font-semibold text-[var(--text-primary)]">{personal.email}</span>.
+                    Review it and press <span className="font-semibold text-[var(--text-primary)]">Send</span> to
+                    deliver your message.
+                  </p>
+                  <p className="mt-2 text-sm text-[var(--text-muted)]">
+                    Nothing opened?{" "}
+                    <a
+                      href={buildMailtoUrl()}
+                      className="font-semibold text-[var(--brand-accent)] underline underline-offset-2 hover:text-[var(--text-primary)] transition-colors"
+                    >
+                      Click here to open the prefilled email
+                    </a>
+                    , or email directly at{" "}
+                    <a
+                      href={`mailto:${personal.email}`}
+                      className="font-semibold text-[var(--brand-accent)] underline underline-offset-2 hover:text-[var(--text-primary)] transition-colors"
+                    >
+                      {personal.email}
+                    </a>
+                    .
+                  </p>
+                </div>
+              )}
             </form>
           </div>
         </div>
