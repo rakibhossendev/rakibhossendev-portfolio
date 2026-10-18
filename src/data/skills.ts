@@ -13,13 +13,8 @@ export const skills: Skill[] = [
     category: "Programming Languages",
   },
   {
-    name: "C",
-    icon: "c",
-    category: "Programming Languages",
-  },
-  {
-    name: "Java",
-    icon: "java",
+    name: "JavaScript",
+    icon: "javascript",
     category: "Programming Languages",
   },
 

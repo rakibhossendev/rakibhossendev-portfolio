@@ -3,12 +3,12 @@ import type { Project } from "@/src/types"
 export const projects: Project[] = [
   {
     id: "project-1",
-    title: "FullStack E-Commerce Platform",
+    title: "Result Management System",
     shortDescription:
       "A full-featured e-commerce app with product listings, cart, checkout, and admin dashboard.",
     fullDescription:
       "Built with Next.js 14 and TypeScript on the frontend, with a Node.js/Express backend and MongoDB database. Features include real-time inventory, Stripe payment integration, JWT authentication, and an admin panel for managing products and orders.",
-    image: "/images/projects/project-1.webp",
+    image: "/images/projects/result-management-system.png",
     technologies: ["Next.js", "TypeScript", "Node.js", "MongoDB", "Stripe"],
     liveUrl: "https://example.com",
     githubUrl: "https://github.com/rakibhossen",
@@ -16,7 +16,7 @@ export const projects: Project[] = [
   },
   {
     id: "project-2",
-    title: "AI-Powered Task Manager",
+    title: "Bangla News",
     shortDescription:
       "A smart task management app with AI-generated subtask breakdowns and priority suggestions.",
     fullDescription:

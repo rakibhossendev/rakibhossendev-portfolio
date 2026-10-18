@@ -8,7 +8,7 @@ import { personal } from "@/src/data/personal"
 
 const roles = [
   "Full Stack Developer",
-  "React.js Enthusiast",
+  "React.js Developer",
   "Next.js Developer",
   "Problem Solver",
 ]
@@ -174,12 +174,12 @@ export function Hero() {
             </div>
 
             {/* Floating badge */}
-            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full border border-[var(--border-accent)] bg-[var(--bg-card)] px-4 py-2 shadow-lg">
+             <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full border border-[var(--border-accent)] bg-[var(--bg-card)] px-4 py-2 shadow-lg">
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
               <span className="text-xs font-medium text-[var(--text-primary)]">
-                Open to Work
-              </span>
-            </div>
+                rakibhossendev
+              </span> 
+            </div> 
           </div>
         </div>
 
