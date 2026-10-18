@@ -5,6 +5,7 @@ import Image from "next/image"
 import { ChevronDown, ChevronUp, User } from "lucide-react"
 import { personal } from "@/src/data/personal"
 import { SectionHeader } from "@/src/components/ui/SectionHeader"
+import { Reveal } from "@/src/components/animations/Reveal"
 
 export function About() {
   const [expanded, setExpanded] = useState(false)
@@ -15,13 +16,16 @@ export function About() {
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--border-accent)] to-transparent" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeader
-          eyebrow="Get to Know Me"
-          title="About Me"
-          icon={<User className="h-5 w-5" />}
-        />
+        <Reveal>
+          <SectionHeader
+            eyebrow="Get to Know Me"
+            title="About Me"
+            icon={<User className="h-5 w-5" />}
+          />
+        </Reveal>
 
-        <div className="mt-12 grid gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-16 items-center">
+        <Reveal className="mt-12">
+          <div className="grid gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-16 items-center">
           {/* Image */}
           <div className="relative flex justify-center lg:justify-start">
             <div className="relative">
@@ -108,6 +112,7 @@ export function About() {
             </div>
           </div>
         </div>
+        </Reveal>
       </div>
     </section>
   )

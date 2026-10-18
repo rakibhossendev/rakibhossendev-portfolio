@@ -9,7 +9,7 @@ interface BlogCardProps {
 
 export function BlogCard({ blog }: BlogCardProps) {
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)] card-hover">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)] card-hover">
       {/* Cover image */}
       {blog.coverImage && (
         <div className="relative h-44 w-full overflow-hidden bg-[var(--bg-secondary)]">

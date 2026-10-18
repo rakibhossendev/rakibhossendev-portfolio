@@ -2,6 +2,7 @@ import { BookOpen, PenLine } from "lucide-react"
 import { blogs } from "@/src/data/blogs"
 import { BlogCard } from "@/src/components/cards/BlogCard"
 import { SectionHeader } from "@/src/components/ui/SectionHeader"
+import { Reveal } from "@/src/components/animations/Reveal"
 
 export function Blogs() {
   return (
@@ -9,12 +10,14 @@ export function Blogs() {
       <div className="absolute inset-0 bg-grid opacity-10" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeader
-          eyebrow="Writing"
-          title="Blog & Articles"
-          description="Thoughts on development, technology, and best practices"
-          icon={<BookOpen className="h-5 w-5" />}
-        />
+        <Reveal>
+          <SectionHeader
+            eyebrow="Writing"
+            title="Blog & Articles"
+            description="Thoughts on development, technology, and best practices"
+            icon={<BookOpen className="h-5 w-5" />}
+          />
+        </Reveal>
 
         {blogs.length === 0 ? (
           <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-[var(--border-subtle)] py-20 text-center">
@@ -29,8 +32,10 @@ export function Blogs() {
           </div>
         ) : (
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {blogs.map((blog) => (
-              <BlogCard key={blog.id} blog={blog} />
+            {blogs.map((blog, i) => (
+              <Reveal key={blog.id} delay={Math.min(i * 60, 400)}>
+                <BlogCard blog={blog} />
+              </Reveal>
             ))}
           </div>
         )}

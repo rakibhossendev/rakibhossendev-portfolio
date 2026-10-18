@@ -18,7 +18,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
   const hasGithub = !!project.githubUrl
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)] transition-all duration-400 ease-out hover:-translate-y-2 hover:border-[var(--border-accent)] hover:shadow-[0_20px_60px_rgba(79,110,247,0.18)] hover:shadow-[var(--brand-accent)]/10">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)] transition-all duration-400 ease-out hover:-translate-y-2 hover:border-[var(--border-accent)] hover:shadow-[0_20px_60px_rgba(79,110,247,0.18)] hover:shadow-[var(--brand-accent)]/10">
 
       {/* Glow overlay on hover */}
       <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 ring-1 ring-inset ring-[var(--brand-accent)]/20 transition-opacity duration-300 group-hover:opacity-100" />
