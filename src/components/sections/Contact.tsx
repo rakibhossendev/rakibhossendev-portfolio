@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { Mail, Send, ArrowUpRight, Shield, User, AtSign, MessageSquare, PenLine } from "lucide-react"
 import { GithubIcon, LinkedinIcon} from "@/src/components/ui/SocialIcons"
 import { personal } from "@/src/data/personal"
@@ -37,9 +37,33 @@ const contactLinks = [
   },
 ]
 
+/** Reference-style radial spotlight that tracks the pointer inside the card (same as ProjectCard). */
+function SpotlightGlow() {
+  return (
+    <div
+      aria-hidden="true"
+      data-spotlight
+      className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      style={{
+        background:
+          "radial-gradient(320px circle at var(--x, 50%) var(--y, 50%), rgba(79, 110, 247, 0.14), transparent 65%)",
+      }}
+    />
+  )
+}
+
 export function Contact() {
   const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" })
   const [sent, setSent] = useState(false)
+
+  // Tracks the pointer inside whichever card fired the event and updates its glow.
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    const glow = e.currentTarget.querySelector<HTMLElement>("[data-spotlight]")
+    if (!glow) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    glow.style.setProperty("--x", `${e.clientX - rect.left}px`)
+    glow.style.setProperty("--y", `${e.clientY - rect.top}px`)
+  }, [])
 
   // Builds a mailto link prefilled with the form, addressed to personal.email
   const buildMailtoUrl = () => {
@@ -97,38 +121,46 @@ export function Contact() {
                   href={href}
                   target={href.startsWith("mailto") ? undefined : "_blank"}
                   rel="noopener noreferrer"
-                  className={`group flex items-center gap-4 rounded-xl border ${border} ${bg} p-4 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg card-hover`}
+                  onMouseMove={handleMouseMove}
+                  data-cursor-label={href.startsWith("mailto") ? "Email" : "Open"}
+                  className={`group relative flex items-center gap-4 overflow-hidden rounded-xl border ${border} ${bg} p-4 transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[var(--border-accent)] hover:shadow-[0_24px_60px_rgba(79,110,247,0.16)]`}
                 >
-                  <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border ${border} ${bg}`}>
+                  <SpotlightGlow />
+                  <div className={`relative z-20 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border ${border} ${bg}`}>
                     <Icon className={`h-5 w-5 ${color}`} />
                   </div>
-                  <div className="min-w-0">
+                  <div className="relative z-20 min-w-0">
                     <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">
                       {label}
                     </p>
-                    <p className="mt-0.5 truncate text-sm font-semibold text-[var(--text-primary)]">
+                    <p className="mt-0.5 truncate text-sm font-semibold text-[var(--text-primary)] transition-colors duration-200 group-hover:text-[var(--brand-accent)]">
                       {value}
                     </p>
                   </div>
-                  <ArrowUpRight className={`ml-auto h-4 w-4 shrink-0 ${color} opacity-0 transition-opacity group-hover:opacity-100`} />
+                  <ArrowUpRight className={`relative z-20 ml-auto h-4 w-4 shrink-0 ${color} opacity-0 transition-opacity group-hover:opacity-100`} />
                 </a>
               ))}
             </div>
           </Reveal>
 
           {/* Right — Form */}
-          <Reveal direction="right" className="rounded-2xl border border-[var(--border-accent)] bg-[var(--bg-card)] p-6 sm:p-8 shadow-[0_0_40px_rgba(79,110,247,0.06)]">
-            {/* Form header */}
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--brand-accent)]/10 border border-[var(--border-accent)]">
-                <Shield className="h-4 w-4 text-[var(--brand-accent)]" />
+          <Reveal direction="right">
+            <div
+              onMouseMove={handleMouseMove}
+              className="group relative overflow-hidden rounded-2xl border border-[var(--border-accent)] bg-[var(--bg-card)] p-6 sm:p-8 shadow-[0_0_40px_rgba(79,110,247,0.06)] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-[0_24px_60px_rgba(79,110,247,0.16)]"
+            >
+              <SpotlightGlow />
+              {/* Form header */}
+              <div className="relative z-20 mb-6 flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--brand-accent)]/10 border border-[var(--border-accent)]">
+                  <Shield className="h-4 w-4 text-[var(--brand-accent)]" />
+                </div>
+                <p className="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">
+                  Send Secure Message
+                </p>
               </div>
-              <p className="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">
-                Send Secure Message
-              </p>
-            </div>
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              <form onSubmit={handleSubmit} className="relative z-20 flex flex-col gap-5">
               {/* Name */}
               <div>
                 <label htmlFor="contact-name" className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">
@@ -205,9 +237,9 @@ export function Contact() {
               {/* Submit */}
               <button
                 type="submit"
-                className="group mt-1 flex w-full items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-[var(--brand-accent)] to-purple-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-[var(--brand-accent)]/20 transition-all duration-300 hover:shadow-[0_0_30px_rgba(79,110,247,0.4)] hover:brightness-110"
+                className="group/btn mt-1 flex w-full items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-[var(--brand-accent)] to-purple-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-[var(--brand-accent)]/20 transition-all duration-300 hover:shadow-[0_0_30px_rgba(79,110,247,0.4)] hover:brightness-110"
               >
-                <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <Send className="h-4 w-4 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
                 Transmit Message
               </button>
 
@@ -243,6 +275,7 @@ export function Contact() {
                 </div>
               )}
             </form>
+            </div>
           </Reveal>
         </div>
       </div>
