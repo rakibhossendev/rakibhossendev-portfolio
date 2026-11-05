@@ -2,8 +2,8 @@
  * Server-side README access.
  *
  * Everything in this module runs in Server Components only — the optional
- * `GITHUB_TOKEN` never reaches the browser. Responses are cached by Next's
- * fetch cache and revalidated hourly.
+ * `GITHUB_TOKEN` never reaches the browser. README responses are cached by
+ * Next's fetch cache and revalidated every 5 minutes (branch discovery daily).
  *
  * Strategy: read the README from the public raw endpoint first (no rate
  * limit), and fall back to the GitHub API (which is rate limited to 60
@@ -13,7 +13,20 @@
 
 const GITHUB_API = "https://api.github.com"
 const RAW_HOST = "https://raw.githubusercontent.com"
-const REVALIDATE_SECONDS = 3600
+
+/**
+ * README content revalidation — 5 minutes, so edits pushed to GitHub show up
+ * on project pages quickly. `raw.githubusercontent.com` has no rate limit for
+ * public repos, so frequent refreshes are cheap.
+ */
+const README_REVALIDATE_SECONDS = 300
+
+/**
+ * Default-branch lookup revalidation — 1 day. This call hits the GitHub API
+ * (60 requests/hour unauthenticated), and branch names rarely change, so it
+ * is kept long to preserve the rate limit.
+ */
+const BRANCH_REVALIDATE_SECONDS = 86400
 
 export interface RepoRef {
   owner: string
@@ -60,7 +73,7 @@ async function getDefaultBranch(ref: RepoRef): Promise<string> {
       `${GITHUB_API}/repos/${ref.owner}/${ref.repo}`,
       {
         headers: apiHeaders(),
-        next: { revalidate: REVALIDATE_SECONDS },
+        next: { revalidate: BRANCH_REVALIDATE_SECONDS },
       }
     )
     if (res.ok) {
@@ -87,7 +100,7 @@ async function readRemote(url: string): Promise<
   try {
     const res = await fetch(url, {
       headers: apiHeaders(),
-      next: { revalidate: REVALIDATE_SECONDS },
+      next: { revalidate: README_REVALIDATE_SECONDS },
     })
     if (res.ok) return { ok: true, text: await res.text() }
     return { ok: false, status: res.status }
@@ -140,7 +153,7 @@ export async function getReadme(
       `${GITHUB_API}/repos/${ref.owner}/${ref.repo}/readme`,
       {
         headers: { ...apiHeaders(), Accept: "application/vnd.github.raw+json" },
-        next: { revalidate: REVALIDATE_SECONDS },
+        next: { revalidate: README_REVALIDATE_SECONDS },
       }
     )
     if (res.ok) {

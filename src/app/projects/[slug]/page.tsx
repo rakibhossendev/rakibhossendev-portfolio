@@ -23,6 +23,13 @@ interface ProjectDetailProps {
   params: Promise<{ slug: string }>
 }
 
+/**
+ * Route-level ISR matching the README fetch cache (`README_REVALIDATE_SECONDS`
+ * in `src/lib/github.ts`) — without this the prerendered HTML could outlive
+ * the fetch entry and keep serving a stale README.
+ */
+export const revalidate = 300
+
 /** Pre-renders every project page at build time; unknown slugs 404 on demand. */
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }))
