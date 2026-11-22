@@ -22,8 +22,23 @@ export const projects: Project[] = [
     githubUrl: "https://github.com/rakibhossendev/Result_Management_System.git",
     featured: true,
   },
-  {
+{
     id: "project-2",
+    slug: "equipment-rental",
+    title: "EQUIPMENT RENTAL PLATFORM",
+    shortDescription:
+      "The purpose of this platform is to make equipment rental easier and more accessible..",
+    fullDescription:
+      "The purpose of this platform is to make equipment rental easier and more accessible..",
+    image: "/images/projects/equipment-rental.png",
+    technologies: [ "Next.js", "TypeScript", "Tailwind CSS", "better-auth", "MongoDB","Oauth 2","shadcn/ui","stripe"],
+    liveUrl: "https://equipment-rental-platform-ochre.vercel.app/",
+    githubUrl: "https://github.com/rakibhossendev/equipment-rental-platform.git",
+    featured: true,
+  }
+  ,
+  {
+    id: "project-3",
     slug: "social-event",
     title: "SOCIAL EVENT MANAGEMENT",
     shortDescription:
@@ -38,7 +53,7 @@ export const projects: Project[] = [
   }
   ,
   {
-    id: "project-3",
+    id: "project-4",
     slug: "bangla-news",
     title: "Bangla News",
     shortDescription:
@@ -52,7 +67,7 @@ export const projects: Project[] = [
     featured: true,
   },
   {
-    id: "project-4",
+    id: "project-5",
     slug: "bazar-dor",
     title: "Bazar Dor",
     shortDescription:
