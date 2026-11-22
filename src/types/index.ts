@@ -41,6 +41,22 @@ export interface Blog {
   tags?: string[]
 }
 
+export interface Achievement {
+  id: string
+  title: string
+  /** Icon key resolved by the card (same string-key convention as Skill.icon). */
+  icon: string
+  /** Short pill shown at the bottom of the card (e.g. placement or role). */
+  badge: string
+  description: string
+  /** Meta lines render only when the field exists — never invent a value. */
+  year?: string
+  location?: string
+  /** Host institution (contests) or organization (community roles). */
+  institution?: string
+  role?: string
+}
+
 export interface PersonalInfo {
   name: string
   role: string
